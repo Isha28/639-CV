@@ -3,6 +3,7 @@ import os
 import pytesseract
 import numpy as np
 from PIL import Image
+from TTS.TTS.bin.connector2 import tts
 
 def invert_image(img):
     inverted_image = cv2.bitwise_not(img)
@@ -46,6 +47,7 @@ def main(input_image):
     save_img(input_image, file)
     text = tesseract(file)
     print (text)
+    tts(text, "out.wav")
     
 if __name__ == "__main__":
     main("sample_images/page_02.png")
