@@ -1,8 +1,9 @@
 import cv2
 import os
-import pytesseract
+from pytesseract import pytesseract
 import numpy as np
 from PIL import Image
+from TTS.TTS.bin.connector2 import tts
 
 def invert_image(img):
     inverted_image = cv2.bitwise_not(img)
@@ -25,6 +26,8 @@ def noise_removal(image):
     return image
 
 def tesseract(input_image):
+    path_to_tesseract = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+    pytesseract.tesseract_cmd = path_to_tesseract
     gray = cv2.imread(input_image)
     custom_oem_psm_config = r'--oem 3 --psm 6'
     temp_file = "{}.jpg".format(os.getpid())
@@ -39,13 +42,13 @@ def save_img(image, file):
 def main(input_image):
     file = "check_noise.jpg"
     image = cv2.imread(input_image)
-#     image = invert_image(image)
-    gray_image = convert_grayscale(image)
-    im_bw = binarization(gray_image)
-    input_image = noise_removal(im_bw)
+    image = convert_grayscale(image)
+    image = binarization(image)
+    input_image = noise_removal(image)
     save_img(input_image, file)
     text = tesseract(file)
-    print (text)
+    tts(text, "out.wav")
+    return text
     
 if __name__ == "__main__":
     main("sample_images/page_02.png")
