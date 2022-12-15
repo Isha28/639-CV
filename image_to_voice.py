@@ -3,12 +3,14 @@ import os
 from pytesseract import pytesseract
 import numpy as np
 from PIL import Image
+from matplotlib import pyplot as plt
 from TTS.TTS.bin.connector2 import tts
+
 
 def invert_image(img):
     inverted_image = cv2.bitwise_not(img)
     return inverted_image
-    
+
 def convert_grayscale(image):
     return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -35,10 +37,10 @@ def tesseract(input_image):
     text = pytesseract.image_to_string(Image.open(temp_file), config=custom_oem_psm_config)
     os.remove(temp_file)
     return text
-    
+
 def save_img(image, file):
     cv2.imwrite(file, image)
-    
+
 def main(input_image):
     file = "check_noise.jpg"
     image = cv2.imread(input_image)
@@ -49,6 +51,47 @@ def main(input_image):
     text = tesseract(file)
     tts(text, "out.wav")
     return text
+
+def get_all_paths_in(directory):
+    paths = []
+    files = os.listdir(directory)
+    for file in files:
+        if file.startswith("."):
+            continue
+        path = os.path.join(directory, file)
+        if os.path.isfile(path):
+            paths.append(path)
+        elif os.path.isdir(path):
+            paths.extend(get_all_paths_in(path))
+    return sorted(paths)
+
+
+def display(im_path): #takes the image path as input
+    dpi = 80
+    im_data = plt.imread(im_path)
+
+    height, width  = im_data.shape[:2]
     
+    # What size does the figure need to be in inches to fit the image?
+    figsize = width / float(dpi), height / float(dpi)
+    
+    # Create a figure of the right size with one axes that takes up the full figure
+    fig = plt.figure(figsize=figsize)
+    ax = fig.add_axes([0, 0, 1, 1])
+
+    # Hide spines, ticks, etc.
+    ax.axis('off')
+
+    # Display the image.
+    ax.imshow(im_data, cmap='gray')
+
+    plt.show()
+
+
 if __name__ == "__main__":
-    main("sample_images/page_02.png")
+    files = get_all_paths_in("testing")
+    for file in files:
+        display(file)
+        main(file)
+
+
