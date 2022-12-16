@@ -9,9 +9,9 @@ The solution to our proposed problem requires three main steps - Image Pre-proce
 Step 1: Image Pre-processing : 
 Below are the important pre-processing techniques we applied on the input image to enhance the quality of the image and extract the right text. We are using the OpenCV python package for this purpose. This step will greatly improve user experience and eliminate some of the current limitations of the OCR systems.
 
-Grayscale Conversion : We are using OpenCV cvtColor function to convert the colored image to grayscale image.
-Threshold and Binarization : This step converts the grayscale image into a binary image with only black and white color. This is done so that Tesseract OCR can identify text easily.
-Noise Removal : We used openCV erode and dilate method to remove small white noises and increase the object area of the input image. We applied median blur filtering technique to preserve the edges of image while removing noise.
+Grayscale Conversion : We are using OpenCV cvtColor function to convert the colored image to grayscale image. <br>
+Threshold and Binarization : This step converts the grayscale image into a binary image with only black and white color. This is done so that Tesseract OCR can identify text easily. <br>
+Noise Removal : We used openCV erode and dilate method to remove small white noises and increase the object area of the input image. We applied median blur filtering technique to preserve the edges of image while removing noise. <br>
 
 Step 2: Image to Text : 
 We used open source Tesseract Optical Character Recognition engine for obtaining text from images [6]. This library is proven to provide better quality output. We provided the required configuration settings in a Python program to read through categories such as texts, numbers and special characters from images and output them with acceptable level of accuracy. This needed trial and error effort to find the right configuration for each of the categories. We have tested the code with rich set of images including images with short words, magazines, and handwritten notes to validate the correctness of the module.
